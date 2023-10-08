@@ -1,6 +1,6 @@
 package com.coin.analys.backend.account.controller;
 
-import com.coin.analys.backend.account.vo.AccountVo;
+import com.coin.analys.backend.account.dto.AccountDto;
 import com.coin.analys.backend.util.ApiResult;
 import com.coin.analys.backend.util.ApiUtils;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ public class AccountController {
     }
 
     @PostMapping("login")
-    public ApiResult<AccountVo> login(@RequestBody AccountVo accountVo){
+    public ApiResult<AccountDto> login(@RequestBody AccountDto accountVo){
         return ApiUtils.success(accountVo);
     }
 }

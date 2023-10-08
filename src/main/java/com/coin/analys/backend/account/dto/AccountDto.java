@@ -1,28 +1,27 @@
-package com.coin.analys.backend.account.vo;
+package com.coin.analys.backend.account.dto;
 
-import com.coin.analys.backend.account.entity.Account;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class AccountVo {
+public class AccountDto {
 
     private final String email;
     private final String password;
 
-    public AccountVo(String email, String password){
+    public AccountDto(String email, String password){
         this.email = email;
         this.password = password;
     }
 
-    public static AccountVo of(String email, String password){
-        return new AccountVo(email, password);
+    public static AccountDto of(String email, String password){
+        return new AccountDto(email, password);
     }
 
     @Override
     public boolean equals(Object obj) {
         if(this == obj) return true;
         if(obj == null || getClass() != obj.getClass()) return false;
-        AccountVo accountVo = (AccountVo) obj;
-        return email.equals(accountVo.email);
+        AccountDto accountDto = (AccountDto) obj;
+        return email.equals(accountDto.email);
     }
 }

@@ -1,5 +1,6 @@
 package com.coin.analys.backend.batch.controller;
 
+import com.coin.analys.backend.batch.dto.BatchDto;
 import com.coin.analys.backend.batch.service.BatchService;
 import com.coin.analys.backend.util.ApiResult;
 import com.coin.analys.backend.util.ApiUtils;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 @ResponseBody
 @RequestMapping("/api/v1/batch")
@@ -19,8 +22,13 @@ public class BatchController {
 
     private static final Logger logger = LoggerFactory.getLogger(BatchController.class);
 
-    @Autowired
-    private BatchService batchService;
+
+    private final BatchService batchService;
+
+    public BatchController(BatchService batchService){
+        this.batchService = batchService;
+    }
+
 
     @GetMapping("start")
     public ApiResult<?> startBatch(@RequestParam("batchId") String batchId){
@@ -36,5 +44,9 @@ public class BatchController {
         }catch(Exception e){
             return ApiUtils.error("fail + " + e.getMessage(), 401);
         }
+    }
+    @GetMapping("list")
+    public ApiResult<List<BatchDto>> getBatchList(){
+        return ApiUtils.success(batchService.getBatchList());
     }
 }
