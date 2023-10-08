@@ -8,10 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,6 +22,7 @@ public class BatchController {
 
     private final BatchService batchService;
 
+    @Autowired
     public BatchController(BatchService batchService){
         this.batchService = batchService;
     }
@@ -48,5 +46,10 @@ public class BatchController {
     @GetMapping("list")
     public ApiResult<List<BatchDto>> getBatchList(){
         return ApiUtils.success(batchService.getBatchList());
+    }
+
+    @PostMapping("register")
+    public ApiResult<BatchDto> registerBatch(@RequestBody BatchDto batchDto){
+        return ApiUtils.success(batchService.registerBatch(batchDto));
     }
 }

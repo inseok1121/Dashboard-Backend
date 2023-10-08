@@ -5,10 +5,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public interface BatchService {
 
     public boolean startBatch(String batchId);
 
     List<BatchDto> getBatchList();
+
+    BatchDto registerBatch(BatchDto batchDto);
 }

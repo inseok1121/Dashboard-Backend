@@ -5,10 +5,12 @@ import com.coin.analys.backend.batch.entity.Batch;
 import com.coin.analys.backend.batch.repository.BatchRepository;
 import com.coin.analys.backend.batch.service.BatchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class BatchServiceImplement implements BatchService {
 
     private final BatchRepository batchRepository;
@@ -26,7 +28,13 @@ public class BatchServiceImplement implements BatchService {
     public List<BatchDto> getBatchList() {
         List<Batch> batches = batchRepository.findAll();
         return batches.stream()
-                .map(BatchDto::toDto)
+                .map(Batch::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public BatchDto registerBatch(BatchDto batchDto) {
+        batchRepository.save(BatchDto.toEntity(batchDto));
+        return batchDto;
     }
 }

@@ -21,7 +21,7 @@ public class AccountController {
     }
 
     @PostMapping("login")
-    public ApiResult<AccountDto> login(@RequestBody AccountDto accountVo){
-        return ApiUtils.success(accountVo);
+    public ApiResult<AccountDto> login(@RequestBody AccountDto accountDto){
+        return ApiUtils.success(accountDto);
     }
 }

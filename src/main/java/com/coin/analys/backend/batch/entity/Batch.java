@@ -5,12 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Batch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,13 +21,12 @@ public class Batch {
     private String url;
     private String params;
 
-    public BatchDto toDto(){
-        BatchDto batchDto = new BatchDto();
-        batchDto.setBatchId(this.batchId);
-        batchDto.setSchedule(this.schedule);
-        batchDto.setUrl(this.url);
-        batchDto.setParams(this.params);
-
-        return batchDto;
+    public static BatchDto toDto(Batch entity){
+        return BatchDto.builder()
+                .batchId(entity.getBatchId())
+                .schedule(entity.getSchedule())
+                .url(entity.getUrl())
+                .params(entity.getParams())
+                .build();
     }
 }

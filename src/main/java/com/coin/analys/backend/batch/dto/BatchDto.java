@@ -14,12 +14,12 @@ public class BatchDto {
     private String url;
     private String params;
 
-    public static BatchDto toDto(Batch entity){
-        return BatchDto.builder()
-                .batchId(entity.getBatchId())
-                .schedule(entity.getSchedule())
-                .url(entity.getUrl())
-                .params(entity.getParams())
+    public static Batch toEntity(BatchDto dto){
+        return Batch.builder()
+                .batchId(dto.getBatchId())
+                .schedule(dto.getSchedule())
+                .url(dto.getUrl())
+                .params(dto.getParams())
                 .build();
     }
 }
