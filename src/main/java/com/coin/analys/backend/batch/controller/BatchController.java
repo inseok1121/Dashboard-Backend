@@ -29,7 +29,7 @@ public class BatchController {
 
 
     @GetMapping("start")
-    public ApiResult<?> startBatch(@RequestParam("batchId") String batchId){
+    public ApiResult<?> startBatch(@RequestParam("batchId") Long batchId){
 
         try{
             boolean result = batchService.startBatch(batchId);
@@ -51,5 +51,15 @@ public class BatchController {
     @PostMapping("register")
     public ApiResult<BatchDto> registerBatch(@RequestBody BatchDto batchDto){
         return ApiUtils.success(batchService.registerBatch(batchDto));
+    }
+
+    @DeleteMapping("delete")
+    public ApiResult<?> deleteBatch(Long batchId){
+        return ApiUtils.success(batchService.deleteBatch(batchId));
+    }
+
+    @PutMapping("update")
+    public ApiResult<BatchDto> updateBatch(@RequestBody BatchDto batchDto){
+        return ApiUtils.success(batchService.updateBatch(batchDto));
     }
 }
