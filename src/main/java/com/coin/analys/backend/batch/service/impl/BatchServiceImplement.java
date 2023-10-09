@@ -20,7 +20,7 @@ public class BatchServiceImplement implements BatchService {
         this.batchRepository = batchRepository;
     }
     @Override
-    public boolean startBatch(String batchId) {
+    public boolean startBatch(Long batchId) {
         return false;
     }
 
@@ -34,7 +34,17 @@ public class BatchServiceImplement implements BatchService {
 
     @Override
     public BatchDto registerBatch(BatchDto batchDto) {
-        batchRepository.save(BatchDto.toEntity(batchDto));
-        return batchDto;
+        return Batch.toDto(batchRepository.save(BatchDto.toEntity(batchDto)));
+    }
+
+    @Override
+    public boolean deleteBatch(Long batchId) {
+        batchRepository.deleteById(batchId);
+        return true;
+    }
+
+    @Override
+    public BatchDto updateBatch(BatchDto batchDto) {
+        return Batch.toDto(batchRepository.save(BatchDto.toEntity(batchDto)));
     }
 }

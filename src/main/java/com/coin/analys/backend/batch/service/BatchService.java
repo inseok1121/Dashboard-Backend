@@ -8,9 +8,13 @@ import java.util.List;
 
 public interface BatchService {
 
-    public boolean startBatch(String batchId);
+    public boolean startBatch(Long batchId);
 
     List<BatchDto> getBatchList();
 
     BatchDto registerBatch(BatchDto batchDto);
+
+    boolean deleteBatch(Long batchId);
+
+    BatchDto updateBatch(BatchDto batchDto);
 }
