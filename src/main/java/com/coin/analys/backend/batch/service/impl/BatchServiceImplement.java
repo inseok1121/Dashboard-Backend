@@ -1,12 +1,14 @@
 package com.coin.analys.backend.batch.service.impl;
 
 import com.coin.analys.backend.batch.component.job.CommandJob;
+import com.coin.analys.backend.batch.component.job.CommonJob;
 import com.coin.analys.backend.batch.dto.BatchDto;
 import com.coin.analys.backend.batch.entity.Batch;
 import com.coin.analys.backend.batch.repository.BatchRepository;
 import com.coin.analys.backend.batch.service.BatchService;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,7 +59,10 @@ public class BatchServiceImplement implements BatchService {
     }
 
     @Override
-    public boolean stopBatch(Long batchId) {
+    public boolean stopBatch(Long batchId) throws SchedulerException {
+        Scheduler scheduler = schedulerFactory.getScheduler();
+
+        scheduler.deleteJob(new JobKey("CommandJob"));
         return false;
     }
 
@@ -65,19 +70,12 @@ public class BatchServiceImplement implements BatchService {
     public boolean runBatch(Long batchId) throws SchedulerException {
         Scheduler scheduler = schedulerFactory.getScheduler();
 
-        JobDetail job = newJob(CommandJob.class)
-                .withIdentity("CommandJob")
-                .build();
+        Batch batch = batchRepository.findById(batchId).orElseThrow();
 
-        Trigger trigger = newTrigger()
-                .withIdentity("CommandJob")
-                .startNow()
-                .withSchedule(simpleSchedule()
-                        .withIntervalInSeconds(2)
-                        .repeatForever())
-                .build();
+        CommandJob commandJob = new CommandJob();
+        commandJob.setJob(batch);
 
-        scheduler.scheduleJob(job, trigger);
+        scheduler.scheduleJob(commandJob.getJob(), commandJob.getTrigger());
 
         return false;
     }
