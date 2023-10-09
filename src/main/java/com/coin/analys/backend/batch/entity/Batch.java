@@ -17,15 +17,17 @@ public class Batch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long batchId;
+    private String type;
+    private String target;
     private String schedule;
-    private String url;
     private String params;
 
     public static BatchDto toDto(Batch entity){
         return BatchDto.builder()
                 .batchId(entity.getBatchId())
+                .type(entity.getType())
                 .schedule(entity.getSchedule())
-                .url(entity.getUrl())
+                .target(entity.getTarget())
                 .params(entity.getParams())
                 .build();
     }

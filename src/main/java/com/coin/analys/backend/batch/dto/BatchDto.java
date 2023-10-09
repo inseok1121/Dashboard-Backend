@@ -10,15 +10,16 @@ import lombok.Setter;
 @Builder
 public class BatchDto {
     private Long batchId;
+    private String type;
+    private String target;
     private String schedule;
-    private String url;
     private String params;
 
     public static Batch toEntity(BatchDto dto){
         return Batch.builder()
                 .batchId(dto.getBatchId())
                 .schedule(dto.getSchedule())
-                .url(dto.getUrl())
+                .target(dto.getTarget())
                 .params(dto.getParams())
                 .build();
     }
