@@ -47,4 +47,14 @@ public class BatchServiceImplement implements BatchService {
     public BatchDto updateBatch(BatchDto batchDto) {
         return Batch.toDto(batchRepository.save(BatchDto.toEntity(batchDto)));
     }
+
+    @Override
+    public boolean stopBatch(Long batchId) {
+        return false;
+    }
+
+    @Override
+    public boolean runBatch(Long batchId) {
+        return false;
+    }
 }

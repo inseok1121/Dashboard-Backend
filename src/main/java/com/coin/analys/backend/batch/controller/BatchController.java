@@ -54,12 +54,42 @@ public class BatchController {
     }
 
     @DeleteMapping("delete")
-    public ApiResult<?> deleteBatch(Long batchId){
+    public ApiResult<?> deleteBatch(@RequestParam("batchId") Long batchId){
         return ApiUtils.success(batchService.deleteBatch(batchId));
     }
 
     @PutMapping("update")
     public ApiResult<BatchDto> updateBatch(@RequestBody BatchDto batchDto){
         return ApiUtils.success(batchService.updateBatch(batchDto));
+    }
+
+    @GetMapping("stop")
+    public ApiResult<?> stopBatch(@RequestParam("batchId") Long batchId){
+        try{
+            boolean result = batchService.stopBatch(batchId);
+
+            if(result){
+                return ApiUtils.success("success");
+            }else{
+                return ApiUtils.error("fail", 401);
+            }
+        }catch(Exception e){
+            return ApiUtils.error("fail + " + e.getMessage(), 401);
+        }
+    }
+
+    @GetMapping("run")
+    public ApiResult<?> runBatch(@RequestParam("batchId") Long batchId){
+        try{
+            boolean result = batchService.runBatch(batchId);
+
+            if(result){
+                return ApiUtils.success("success");
+            }else{
+                return ApiUtils.error("fail", 401);
+            }
+        }catch(Exception e){
+            return ApiUtils.error("fail + " + e.getMessage(), 401);
+        }
     }
 }
