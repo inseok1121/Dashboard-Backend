@@ -1,6 +1,7 @@
 package com.coin.analys.backend.batch.service;
 
 import com.coin.analys.backend.batch.dto.BatchDto;
+import org.quartz.SchedulerException;
 
 import java.util.List;
 
@@ -19,5 +20,5 @@ public interface BatchService {
 
     boolean stopBatch(Long batchId);
 
-    boolean runBatch(Long batchId);
+    boolean runBatch(Long batchId) throws SchedulerException;
 }
