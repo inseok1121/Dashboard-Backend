@@ -20,6 +20,7 @@ public class BatchHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long historyId;
     private Long batchId;
+    private String result;
     private Date startTime;
     private Date endTime;
     private String msg;
