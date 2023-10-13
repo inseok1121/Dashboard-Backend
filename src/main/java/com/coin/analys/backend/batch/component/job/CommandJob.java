@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
@@ -47,11 +50,26 @@ public class CommandJob extends CommonJob{
     }
 
     @Override
-    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+    public void execute(JobExecutionContext jobExecutionContext) {
+
         String batchId = jobExecutionContext.getJobDetail().getKey().getName();
-        log.info(batchId);
         String jobData = (String) jobExecutionContext.getJobDetail().getJobDataMap().get("COMMAND" + batchId);
 
-        System.out.println(jobData);
+        run(jobData);
+
+    }
+
+    public void run(String command){
+        try{
+            Process p = Runtime.getRuntime().exec(command);
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line = null;
+
+            while((line = br.readLine()) != null){
+                log.info(line);
+            }
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
     }
 }
