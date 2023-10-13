@@ -62,7 +62,7 @@ public class BatchServiceImplement implements BatchService {
     public boolean stopBatch(Long batchId) throws SchedulerException {
         Scheduler scheduler = schedulerFactory.getScheduler();
 
-        scheduler.deleteJob(new JobKey("CommandJob"));
+        scheduler.deleteJob(new JobKey("CommandJob" + batchId));
         return false;
     }
 
