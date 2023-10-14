@@ -1,8 +1,11 @@
 package com.coin.analys.backend.batch.service;
 
 import com.coin.analys.backend.batch.dto.BatchDto;
+import com.coin.analys.backend.batch.entity.Batch;
 import org.quartz.SchedulerException;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -22,4 +25,6 @@ public interface BatchService {
     boolean stopBatch(Long batchId) throws SchedulerException;
 
     boolean runBatch(Long batchId) throws SchedulerException, ChangeSetPersister.NotFoundException;
+
+    Page<BatchDto> searchBatchList(String type, String target, String schedule, Pageable pageable);
 }
