@@ -4,9 +4,14 @@ import com.coin.analys.backend.batch.dto.BatchDto;
 import com.coin.analys.backend.batch.service.BatchService;
 import com.coin.analys.backend.util.ApiResult;
 import com.coin.analys.backend.util.ApiUtils;
+import org.hibernate.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +56,15 @@ public class BatchController {
     @PostMapping("register")
     public ApiResult<BatchDto> registerBatch(@RequestBody BatchDto batchDto){
         return ApiUtils.success(batchService.registerBatch(batchDto));
+    }
+    @GetMapping("search")
+    public ApiResult<Page<BatchDto>> searchBatchList(
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "target", required = false) String target,
+            @RequestParam(value = "schedule", required = false) String schedule,
+            @PageableDefault(size = 20, sort = "batchId", direction = Sort.Direction.ASC) Pageable pageable
+            ){
+        return ApiUtils.success(batchService.searchBatchList(type, target, schedule, pageable));
     }
 
     @DeleteMapping("delete")

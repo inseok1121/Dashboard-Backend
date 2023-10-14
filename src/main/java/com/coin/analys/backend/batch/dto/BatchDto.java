@@ -18,6 +18,7 @@ public class BatchDto {
     public static Batch toEntity(BatchDto dto){
         return Batch.builder()
                 .batchId(dto.getBatchId())
+                .type(dto.getType())
                 .schedule(dto.getSchedule())
                 .target(dto.getTarget())
                 .params(dto.getParams())

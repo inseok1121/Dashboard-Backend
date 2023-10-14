@@ -1,22 +1,22 @@
 package com.coin.analys.backend.batch.service.impl;
 
 import com.coin.analys.backend.batch.component.job.CommandJob;
-import com.coin.analys.backend.batch.component.job.CommonJob;
 import com.coin.analys.backend.batch.dto.BatchDto;
 import com.coin.analys.backend.batch.entity.Batch;
 import com.coin.analys.backend.batch.repository.BatchRepository;
+import com.coin.analys.backend.batch.specification.BatchSpecification;
 import com.coin.analys.backend.batch.service.BatchService;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.quartz.JobBuilder.newJob;
-import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
-import static org.quartz.TriggerBuilder.newTrigger;
 
 @Service
 public class BatchServiceImplement implements BatchService {
@@ -40,6 +40,7 @@ public class BatchServiceImplement implements BatchService {
         return batches.stream()
                 .map(Batch::toDto)
                 .collect(Collectors.toList());
+
     }
 
     @Override
@@ -78,5 +79,28 @@ public class BatchServiceImplement implements BatchService {
         scheduler.scheduleJob(commandJob.getJob(), commandJob.getTrigger());
 
         return false;
+    }
+
+    public Page<BatchDto> searchBatchList(String type, String target, String schedule, Pageable pageable) {
+        Specification<Batch> spec = Specification.where(null);
+
+        if (type != null && !type.isEmpty()) {
+            spec = spec.and(BatchSpecification.equalType(type));
+        }
+
+        if (target != null && !target.isEmpty()) {
+            spec = spec.and(BatchSpecification.likeTarget(target));
+        }
+
+        if (schedule != null && !schedule.isEmpty()) {
+            spec = spec.and(BatchSpecification.likeSchedule(schedule));
+        }
+
+        Page<Batch> batches = batchRepository.findAll(spec, pageable);
+
+        // Batch 엔티티를 BatchDto로 변환
+        Page<BatchDto> batchDtos = batches.map(Batch::toDto);
+
+        return batchDtos;
     }
 }
