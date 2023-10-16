@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -21,6 +23,9 @@ public class Batch {
     private String target;
     private String schedule;
     private String params;
+    private LocalDateTime lastStartTime;
+    private LocalDateTime lastEndTime;
+
 
     public static BatchDto toDto(Batch entity){
         return BatchDto.builder()
@@ -29,6 +34,8 @@ public class Batch {
                 .schedule(entity.getSchedule())
                 .target(entity.getTarget())
                 .params(entity.getParams())
+                .lastStartTime(entity.getLastStartTime())
+                .lastEndTime(entity.getLastEndTime())
                 .build();
     }
 }
