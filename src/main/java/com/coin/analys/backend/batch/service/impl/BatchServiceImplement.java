@@ -1,6 +1,8 @@
 package com.coin.analys.backend.batch.service.impl;
 
+import com.coin.analys.backend.batch.component.job.ApiJob;
 import com.coin.analys.backend.batch.component.job.CommandJob;
+import com.coin.analys.backend.batch.component.job.CommonJob;
 import com.coin.analys.backend.batch.dto.BatchDto;
 import com.coin.analys.backend.batch.entity.Batch;
 import com.coin.analys.backend.batch.repository.BatchRepository;
@@ -73,12 +75,25 @@ public class BatchServiceImplement implements BatchService {
 
         Batch batch = batchRepository.findById(batchId).orElseThrow();
 
-        CommandJob commandJob = new CommandJob();
-        commandJob.setJob(batch);
+        CommonJob job = createJob(batch);
 
-        scheduler.scheduleJob(commandJob.getJob(), commandJob.getTrigger());
+        scheduler.scheduleJob(job.getJob(), job.getTrigger());
 
         return false;
+    }
+
+    private CommonJob createJob(Batch batch) {
+        if ("COMMAND".equals(batch.getType())) {
+            return createJobWithType(new CommandJob(), batch);
+        } else if ("API".equals(batch.getType())) {
+            return createJobWithType(new ApiJob(), batch);
+        }
+
+        return new CommonJob();
+    }
+    private CommonJob createJobWithType(CommonJob job, Batch batch) {
+        job.setJobInformation(batch);
+        return job;
     }
 
     public Page<BatchDto> searchBatchList(String type, String target, String schedule, Pageable pageable) {

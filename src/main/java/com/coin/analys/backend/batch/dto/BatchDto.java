@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 public class BatchDto {
     private Long batchId;
     private String type;
+    private String header;
+    private String method;
     private String target;
     private String schedule;
     private String params;
@@ -23,6 +25,8 @@ public class BatchDto {
         return Batch.builder()
                 .batchId(dto.getBatchId())
                 .type(dto.getType())
+                .header(dto.getHeader())
+                .method(dto.getMethod())
                 .schedule(dto.getSchedule())
                 .target(dto.getTarget())
                 .params(dto.getParams())

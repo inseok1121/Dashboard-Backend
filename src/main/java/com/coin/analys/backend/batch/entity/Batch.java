@@ -20,6 +20,8 @@ public class Batch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long batchId;
     private String type;
+    private String header;
+    private String method;
     private String target;
     private String schedule;
     private String params;
@@ -31,6 +33,8 @@ public class Batch {
         return BatchDto.builder()
                 .batchId(entity.getBatchId())
                 .type(entity.getType())
+                .header(entity.getHeader())
+                .method(entity.getMethod())
                 .schedule(entity.getSchedule())
                 .target(entity.getTarget())
                 .params(entity.getParams())
