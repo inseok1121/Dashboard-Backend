@@ -1,6 +1,6 @@
 package com.coin.analys.backend.batch.entity;
 
-import com.coin.analys.backend.batch.dto.BatchDto;
+import com.coin.analys.backend.batch.dto.CommandBatchDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,35 +9,28 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
+@Entity
 @NoArgsConstructor
-public class Batch {
+@AllArgsConstructor
+@RequiredArgsConstructor
+public class CommandBatch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long batchId;
-    private String type;
-    private String header;
-    private String method;
-    private String target;
+    private String command;
+
     private String schedule;
-    private String params;
     private LocalDateTime lastStartTime;
     private LocalDateTime lastEndTime;
 
-
-    public static BatchDto toDto(Batch entity){
-        return BatchDto.builder()
+    public static CommandBatchDto toDto(CommandBatch entity){
+        return CommandBatchDto.builder()
                 .batchId(entity.getBatchId())
-                .type(entity.getType())
-                .header(entity.getHeader())
-                .method(entity.getMethod())
+                .command(entity.getCommand())
                 .schedule(entity.getSchedule())
-                .target(entity.getTarget())
-                .params(entity.getParams())
                 .lastStartTime(entity.getLastStartTime())
                 .lastEndTime(entity.getLastEndTime())
                 .build();
