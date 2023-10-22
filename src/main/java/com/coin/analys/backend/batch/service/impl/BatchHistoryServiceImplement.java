@@ -1,6 +1,5 @@
 package com.coin.analys.backend.batch.service.impl;
 
-import com.coin.analys.backend.batch.dto.BatchDto;
 import com.coin.analys.backend.batch.dto.BatchHistoryDto;
 import com.coin.analys.backend.batch.entity.BatchHistory;
 import com.coin.analys.backend.batch.repository.BatchHistoryRepository;

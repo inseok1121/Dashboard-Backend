@@ -22,7 +22,7 @@ public class ApiBatchDto{
     private LocalDateTime lastStartTime;
     private LocalDateTime lastEndTime;
 
-    public static ApiBatch toDto(ApiBatchDto dto){
+    public static ApiBatch toEntity(ApiBatchDto dto){
         return ApiBatch.builder()
                 .batchId(dto.getBatchId())
                 .method(dto.getMethod())

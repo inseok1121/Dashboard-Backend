@@ -1,6 +1,5 @@
 package com.coin.analys.backend.batch.specification;
 
-import com.coin.analys.backend.batch.entity.Batch;
 import com.coin.analys.backend.batch.entity.BatchHistory;
 import org.springframework.data.jpa.domain.Specification;
 

@@ -1,7 +1,7 @@
 package com.coin.analys.backend.batch.component.job;
 
-import com.coin.analys.backend.batch.entity.Batch;
-import com.coin.analys.backend.batch.repository.BatchRepository;
+import com.coin.analys.backend.batch.entity.ApiBatch;
+import com.coin.analys.backend.batch.repository.ApiBatchRepository;
 import lombok.*;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import static com.coin.analys.backend.util.HttpRequest.get;
-import static com.coin.analys.backend.util.HttpRequest.post;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
@@ -23,29 +21,28 @@ import static org.quartz.TriggerBuilder.newTrigger;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApiJob extends CommonJob{
+public class ApiJob{
 
     private final Logger log = LoggerFactory.getLogger(ApiJob.class);
-    private Batch batch;
+    private ApiBatch apiBatch;
     private JobDetail job;
     private Trigger trigger;
-    private BatchRepository batchRepository;
-    @Override
-    public void setJobInformation(Batch batch){
+    private ApiBatchRepository apiBatchRepository;
+    public void setJobInformation(ApiBatch apiBatch){
 
-        this.batch = batch;
+        this.apiBatch = apiBatch;
 
         this.job = newJob(ApiJob.class)
-                .withIdentity(String.valueOf(batch.getBatchId()))
-                .usingJobData("COMMAND" + String.valueOf(batch.getBatchId()), batch.getTarget())
+                .withIdentity(String.valueOf(apiBatch.getBatchId()))
+                .usingJobData("APIBATCH" + String.valueOf(apiBatch.getBatchId()))
                 .build();
 
         this.trigger = newTrigger()
-                .withIdentity(String.valueOf(batch.getBatchId()))
+                .withIdentity(String.valueOf(apiBatch.getBatchId()))
                 .startNow()
-                .withSchedule(CronScheduleBuilder.cronSchedule(batch.getSchedule())).build();
+                .withSchedule(CronScheduleBuilder.cronSchedule(apiBatch.getSchedule())).build();
 
-        log.info("[*] SET BATCH : " + String.valueOf(this.batch.getBatchId()));
+        log.info("[*] SET BATCH : " + String.valueOf(this.apiBatch.getBatchId()));
 
         try {
             Scheduler scheduler = new StdSchedulerFactory().getScheduler();
@@ -55,34 +52,17 @@ public class ApiJob extends CommonJob{
         }
     }
 
-    @Override
     public void execute(JobExecutionContext jobExecutionContext) {
 
         String batchId = jobExecutionContext.getJobDetail().getKey().getName();
         String jobData = (String) jobExecutionContext.getJobDetail().getJobDataMap().get("COMMAND" + batchId);
 
-        Batch currentBatch  = batchRepository.getReferenceById(Long.valueOf(batchId));
+        ApiBatch currentBatch  = apiBatchRepository.getReferenceById(Long.valueOf(batchId));
 
         if("GET".equals(currentBatch.getMethod())){
 
         }else if("POST".equals(currentBatch.getMethod())){
 
-        }
-        run(jobData);
-
-    }
-
-    public void run(String command){
-        try{
-            Process p = Runtime.getRuntime().exec(command);
-            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line = null;
-
-            while((line = br.readLine()) != null){
-                log.info(line);
-            }
-        }catch (Exception e){
-            log.error(e.getMessage());
         }
     }
 }

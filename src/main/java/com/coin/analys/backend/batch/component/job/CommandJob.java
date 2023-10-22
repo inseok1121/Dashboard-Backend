@@ -1,6 +1,6 @@
 package com.coin.analys.backend.batch.component.job;
 
-import com.coin.analys.backend.batch.entity.Batch;
+import com.coin.analys.backend.batch.entity.CommandBatch;
 import lombok.Getter;
 import lombok.Setter;
 import org.quartz.*;
@@ -13,33 +13,33 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import static org.quartz.JobBuilder.newJob;
-import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 @Component
 @Getter
 @Setter
-public class CommandJob extends CommonJob{
+public class CommandJob{
 
     private final Logger log = LoggerFactory.getLogger(CommandJob.class);
-    private Batch batch;
+    private CommandBatch commandBatch;
+    protected JobDetail job;
+    protected Trigger trigger;
 
-    @Override
-    public void setJobInformation(Batch batch){
+    public void setJobInformation(CommandBatch commandBatch){
 
-        this.batch = batch;
+        this.commandBatch = commandBatch;
 
-        super.job = newJob(CommandJob.class)
-                .withIdentity(String.valueOf(batch.getBatchId()))
-                .usingJobData("COMMAND" + String.valueOf(batch.getBatchId()), batch.getTarget())
+        this.job = newJob(CommandJob.class)
+                .withIdentity(String.valueOf(commandBatch.getBatchId()))
+                .usingJobData("COMMANDBATCH" + String.valueOf(commandBatch.getBatchId()), commandBatch.getTarget())
                 .build();
 
-        super.trigger = newTrigger()
-                .withIdentity(String.valueOf(batch.getBatchId()))
+        this.trigger = newTrigger()
+                .withIdentity(String.valueOf(commandBatch.getBatchId()))
                 .startNow()
-                .withSchedule(CronScheduleBuilder.cronSchedule(batch.getSchedule())).build();
+                .withSchedule(CronScheduleBuilder.cronSchedule(commandBatch.getSchedule())).build();
 
-        log.info("[*] SET BATCH : " + String.valueOf(this.batch.getBatchId()));
+        log.info("[*] SET BATCH : " + String.valueOf(this.commandBatch.getBatchId()));
 
         try {
             Scheduler scheduler = new StdSchedulerFactory().getScheduler();
@@ -49,7 +49,6 @@ public class CommandJob extends CommonJob{
         }
     }
 
-    @Override
     public void execute(JobExecutionContext jobExecutionContext) {
 
         String batchId = jobExecutionContext.getJobDetail().getKey().getName();

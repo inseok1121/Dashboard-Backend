@@ -2,7 +2,6 @@ package com.coin.analys.backend.batch.controller;
 
 import com.coin.analys.backend.batch.dto.BatchHistoryDto;
 import com.coin.analys.backend.batch.service.BatchHistoryService;
-import com.coin.analys.backend.batch.service.BatchService;
 import com.coin.analys.backend.util.ApiResult;
 import com.coin.analys.backend.util.ApiUtils;
 import org.slf4j.Logger;
